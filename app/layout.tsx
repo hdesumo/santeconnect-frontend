@@ -1,42 +1,43 @@
+// app/layout.tsx
 import "./globals.css";
-import { ReactNode } from "react";
-import SidebarSoignant from "@/components/SidebarSoignant";
-import SidebarEtablissement from "@/components/SidebarEtablissement";
-import MobileSidebar from "@/components/MobileSidebar";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import type { Metadata } from "next";
 
-// ⚠️ Mock pour le rôle utilisateur (à remplacer par ton système d’auth)
-const getUserRole = (): "soignant" | "etablissement" => {
-  return "soignant"; // ou "etablissement"
+export const metadata: Metadata = {
+  title: "SanteConnect",
+  description: "Annuaire et services de santé en Bretagne",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
-  const role = getUserRole();
-
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="fr">
-      <body className="flex flex-col min-h-screen">
-        {/* Navbar en haut */}
-        <Navbar />
+      <body>
+        {children}
 
-        <div className="flex flex-1">
-          {/* Sidebar desktop */}
-          <div className="hidden md:block">
-            {role === "soignant" ? <SidebarSoignant /> : <SidebarEtablissement />}
-          </div>
-
-          {/* Sidebar mobile */}
-          <div className="md:hidden">
-            <MobileSidebar role={role} />
-          </div>
-
-          {/* Contenu principal */}
-          <main className="flex-1 p-6">{children}</main>
-        </div>
-
-        {/* Footer en bas */}
-        <Footer />
+        {/* Chatwoot Widget */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(d,t) {
+                var BASE_URL="https://app.chatwoot.com"; // change si auto-hébergé
+                var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+                g.src=BASE_URL+"/packs/js/sdk.js";
+                g.defer = true;
+                g.async = true;
+                s.parentNode.insertBefore(g,s);
+                g.onload=function(){
+                  window.chatwootSDK.run({
+                    websiteToken: "TON_TOKEN_WIDGET_ICI",
+                    baseUrl: BASE_URL
+                  })
+                }
+              })(document,"script");
+            `,
+          }}
+        />
       </body>
     </html>
   );

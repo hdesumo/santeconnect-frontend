@@ -1,47 +1,42 @@
 import HeroSlider from "@/components/HeroSlider";
+import BlogMarquee from "@/components/BlogMarquee";
+import SearchBar from "@/components/SearchBar";
 import AboutSection from "@/components/AboutSection";
-import FeaturesSection from "@/components/FeaturesSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import StatsSection from "@/components/StatsSection";
 import CTASection from "@/components/CTASection";
-import BlogMarquee from "@/components/BlogMarquee";
-import SearchBar from "@/components/SearchBar";
+import Footer from "@/components/Footer";
 
 export default function HomePage() {
   return (
     <main className="flex flex-col">
-      {/* Hero avec slider */}
+      {/* Hero avec sliders */}
       <HeroSlider />
-
-      {/* Marquee avec articles récents */}
       <BlogMarquee />
+      <SearchBar />   {/* ← Barre interactive */}
+      {/* Marquee des articles de blog */}
+      <div className="bg-blue-50 py-3 border-t border-b">
+        <div className="container mx-auto">
+          <BlogMarquee />
+        </div>
+      </div>
 
-      {/* Barre de recherche Annuaire */}
-      <section className="container mx-auto px-6 py-8">
-        <h2 className="text-xl font-semibold text-gray-800 text-center mb-4">
-          🔍 Annuaire des établissements de santé du 35 et du 44
+      {/* Barre de recherche de l’annuaire */}
+      <section className="container mx-auto py-8 px-4">
+        <h2 className="text-center text-2xl md:text-3xl font-semibold mb-4">
+          Annuaire des établissements de santé de Bretagne
         </h2>
         <SearchBar />
       </section>
 
-      {/* À propos */}
+      {/* Autres sections */}
       <AboutSection />
-
-      {/* Fonctionnalités */}
-      <FeaturesSection />
-
-      {/* Comment ça marche */}
       <HowItWorksSection />
-
-      {/* Témoignages */}
       <TestimonialsSection />
-
-      {/* Statistiques */}
       <StatsSection />
-
-      {/* Call to action */}
       <CTASection />
+      <Footer />
     </main>
   );
 }

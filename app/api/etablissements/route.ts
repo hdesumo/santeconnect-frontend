@@ -1,26 +1,33 @@
 import { NextResponse } from "next/server";
-
-const etablissements = [
-  { id: 1, nom: "Clinique du Parc", adresse: "12 Rue de Rennes", departement: "35" },
-  { id: 2, nom: "CHU de Nantes", adresse: "1 Quai Moncousu", departement: "44" },
-  { id: 3, nom: "Centre Médical Redon", adresse: "5 Rue de la Gare", departement: "35" },
-  { id: 4, nom: "Polyclinique Saint-Herblain", adresse: "10 Av. des Lilas", departement: "44" },
-  { id: 5, nom: "Maison de Santé Rennes Sud", adresse: "20 Bd Clemenceau", departement: "35" },
-];
+import prisma from "@/lib/prisma"; // adapte si ton client DB est ailleurs
 
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
-  const search = searchParams.get("search")?.toLowerCase() || "";
+  try {
+    const { searchParams } = new URL(req.url);
+    const search = searchParams.get("search");
 
-  if (!search) {
+    let etablissements;
+
+    if (search) {
+      etablissements = await prisma.etablissementAnnuaire.findMany({
+        where: {
+          OR: [
+            { nom: { contains: search, mode: "insensitive" } },
+            { adresse: { contains: search, mode: "insensitive" } },
+            { departement: { contains: search, mode: "insensitive" } },
+          ],
+        },
+        take: 10, // limite pour la recherche dynamique
+      });
+    } else {
+      etablissements = await prisma.etablissementAnnuaire.findMany({
+        take: 50,
+      });
+    }
+
     return NextResponse.json(etablissements);
+  } catch (error) {
+    console.error("Erreur API etablissements:", error);
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
-
-  const filtered = etablissements.filter((e) =>
-    e.nom.toLowerCase().includes(search) ||
-    e.adresse.toLowerCase().includes(search) ||
-    e.departement.includes(search)
-  );
-
-  return NextResponse.json(filtered);
 }

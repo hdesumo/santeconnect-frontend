@@ -2,40 +2,57 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer
-      className="bg-gray-50 border-t border-gray-200 mt-12"
-      role="contentinfo"
-      aria-label="Pied de page principal"
-    >
-      <div className="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-4 gap-8">
-        {/* Logo et description */}
+    <footer className="bg-gray-900 text-gray-300 py-12">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+        {/* Logo + Intro */}
         <div>
-          <h2 className="text-xl font-bold text-blue-600">SantéConnect</h2>
-          <p className="mt-3 text-sm text-gray-600">
-            La plateforme qui relie soignants et établissements en toute
-            simplicité et sécurité.
+          <h3 className="text-2xl font-bold text-white mb-4">SantéConnect</h3>
+          <p className="text-gray-400 text-sm">
+            La plateforme qui facilite la mise en relation entre établissements
+            de santé et soignants.  
+            <br /> Vos missions, en toute sérénité.
           </p>
         </div>
 
         {/* Navigation */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-            Navigation
-          </h3>
-          <ul className="mt-3 space-y-2">
+          <h4 className="text-lg font-semibold text-white mb-3">Navigation</h4>
+          <ul className="space-y-2 text-sm">
             <li>
-              <Link href="/features" className="text-gray-600 hover:text-blue-600">
-                Fonctionnalités
+              <Link href="/offres" className="hover:text-white">
+                Offres de mission
               </Link>
             </li>
             <li>
-              <Link href="/how-it-works" className="text-gray-600 hover:text-blue-600">
+              <Link href="/annuaire" className="hover:text-white">
+                Annuaire des établissements
+              </Link>
+            </li>
+            <li>
+              <Link href="/blog" className="hover:text-white">
+                Blog Santé
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Ressources */}
+        <div>
+          <h4 className="text-lg font-semibold text-white mb-3">Ressources</h4>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <Link href="/comment-ca-marche" className="hover:text-white">
                 Comment ça marche
               </Link>
             </li>
             <li>
-              <Link href="/testimonials" className="text-gray-600 hover:text-blue-600">
+              <Link href="/temoignages" className="hover:text-white">
                 Témoignages
+              </Link>
+            </li>
+            <li>
+              <Link href="/contact" className="hover:text-white">
+                Contact
               </Link>
             </li>
           </ul>
@@ -43,58 +60,30 @@ export default function Footer() {
 
         {/* Légal */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-            Légal
-          </h3>
-          <ul className="mt-3 space-y-2">
+          <h4 className="text-lg font-semibold text-white mb-3">Légal</h4>
+          <ul className="space-y-2 text-sm">
             <li>
-              <Link href="/mentions-legales" className="text-gray-600 hover:text-blue-600">
+              <Link href="/mentions-legales" className="hover:text-white">
                 Mentions légales
               </Link>
             </li>
             <li>
-              <Link href="/politique-confidentialite" className="text-gray-600 hover:text-blue-600">
+              <Link href="/politique-confidentialite" className="hover:text-white">
                 Politique de confidentialité
               </Link>
             </li>
             <li>
-              <Link href="/protection-donnees" className="text-gray-600 hover:text-blue-600">
+              <Link href="/protection-donnees" className="hover:text-white">
                 Protection des données
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* Contact */}
-        <div>
-          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-            Contact
-          </h3>
-          <ul className="mt-3 space-y-2 text-gray-600">
-            <li>Email : contact@santeconnect.com</li>
-            <li>Tél. : +33 1 23 45 67 89</li>
-            <li>
-              <Link href="/contact" className="hover:text-blue-600">
-                Formulaire de contact
               </Link>
             </li>
           </ul>
         </div>
       </div>
 
-      {/* Copyright */}
-      <div className="bg-gray-100 py-4">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} SantéConnect. Tous droits réservés.</p>
-          <div className="flex space-x-4 mt-2 md:mt-0">
-            <Link href="/mentions-legales" className="hover:text-blue-600">
-              Mentions légales
-            </Link>
-            <Link href="/politique-confidentialite" className="hover:text-blue-600">
-              Confidentialité
-            </Link>
-          </div>
-        </div>
+      {/* Bas du footer */}
+      <div className="mt-8 border-t border-gray-700 pt-6 text-center text-sm text-gray-500">
+        © {new Date().getFullYear()} SantéConnect — Tous droits réservés.
       </div>
     </footer>
   );

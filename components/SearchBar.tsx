@@ -1,64 +1,72 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Search } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SearchBar() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-  useEffect(() => {
-    if (query.length < 2) {
+  const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setQuery(value);
+
+    if (value.length < 2) {
       setResults([]);
       return;
     }
 
-    setIsLoading(true);
+    setLoading(true);
 
-    fetch(`/api/etablissements?search=${encodeURIComponent(query)}`)
-      .then((res) => res.json())
-      .then((data) => setResults(data))
-      .finally(() => setIsLoading(false));
-  }, [query]);
+    try {
+      const res = await fetch(`/api/etablissements?search=${value}`);
+      if (res.ok) {
+        const data = await res.json();
+        setResults(data);
+      } else {
+        setResults([]);
+      }
+    } catch (err) {
+      console.error("Erreur recherche établissements:", err);
+      setResults([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSelect = (id: number) => {
+    // Redirection vers la page détails
+    router.push(`/etablissements/${id}`);
+  };
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4">
-      {/* Barre de recherche */}
-      <div className="relative flex items-center">
-        <Search className="absolute left-3 text-gray-400" size={20} />
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Rechercher un établissement de santé..."
-          className="w-full border rounded-lg pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
-        />
-      </div>
+    <div className="w-full max-w-2xl mx-auto relative">
+      <input
+        type="text"
+        value={query}
+        onChange={handleSearch}
+        placeholder="Rechercher un établissement..."
+        className="w-full p-3 border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
 
-      {/* Résultats */}
-      {query.length >= 2 && (
-        <div className="mt-2 bg-white border rounded-lg shadow-md max-h-60 overflow-y-auto">
-          {isLoading ? (
-            <p className="p-3 text-gray-500">Recherche en cours...</p>
-          ) : results.length > 0 ? (
-            <ul>
-              {results.map((etab) => (
-                <li
-                  key={etab.id}
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  <p className="font-medium">{etab.nom}</p>
-                  <p className="text-sm text-gray-600">
-                    {etab.adresse} ({etab.departement})
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="p-3 text-gray-500">Aucun établissement trouvé.</p>
-          )}
-        </div>
+      {loading && (
+        <p className="absolute left-2 top-12 text-sm text-gray-500">Recherche...</p>
+      )}
+
+      {results.length > 0 && (
+        <ul className="absolute z-10 w-full bg-white border rounded-lg mt-1 shadow-lg">
+          {results.map((etab) => (
+            <li
+              key={etab.id}
+              onClick={() => handleSelect(etab.id)}
+              className="px-4 py-2 cursor-pointer hover:bg-blue-100"
+            >
+              {etab.nom} – {etab.departement}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
